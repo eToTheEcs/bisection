@@ -1,2 +1,2 @@
 # bisection
-find roots of polynomials using bisection algorithm.
+some numerical algorithms applied on polynomials.
