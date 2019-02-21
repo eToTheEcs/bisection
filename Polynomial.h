@@ -48,7 +48,7 @@ private:
 
 	const double EPSILON = 10E-5;
 
-	static const int N_INTERVALS = 64;
+	static const int N_INTERVALS = 8;
 
 	/**
 	 * polynomial coefficients

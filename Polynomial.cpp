@@ -121,6 +121,9 @@ double Polynomial::integrateByRectangles(double a, double b)
 
 	for (double runnerX = a; intervalCounter < N_INTERVALS; runnerX += dx, intervalCounter++) {
 		
+		/*if(intervalCounter > 0)
+			printf("interval no. %d, [%lf, %lf]\n", intervalCounter, runnerX-dx, runnerX);*/
+
 		runnerH = this->compute(runnerX);
 		result += runnerH;
 	}
@@ -142,6 +145,8 @@ double Polynomial::integrateByTrapezoidal(double a, double b)
 
 	for (double runnerX = a; intervalCounter < N_INTERVALS; runnerX += dx, intervalCounter++) {
 		
+		//printf("interval no. %d, [%lf, %lf]\n", intervalCounter, runnerX, runnerX+dx);
+
 		runnerH = this->compute(runnerX) + this->compute(runnerX + dx);
 		result += runnerH;
 	}
@@ -166,7 +171,9 @@ double Polynomial::integrateByCavSimp(double a, double b)
 
 	int intervalCounter = 1;
 	// odd-indexed
-	for (double runnerX = a; intervalCounter < numIntervals; runnerX += dx, intervalCounter++) {
+	for (double runnerX = a; intervalCounter <= numIntervals; runnerX += dx, intervalCounter++) {
+
+		//printf("runnerX = %lf\n", runnerX);
 
 		if (intervalCounter % 2)
 			odd += this->compute(runnerX);
