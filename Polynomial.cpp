@@ -103,6 +103,91 @@ double Polynomial::findZero(double a, double b)
 	}
 }
 
+double Polynomial::integrate(double a, double b)
+{
+
+	return this->integrateByCavSimp(a, b);
+}
+
+double Polynomial::integrateByRectangles(double a, double b)
+{
+	double runnerH;	// y-value
+	double dx = this->getIntervalAmplitude(a, b);
+	double result = 0;
+	int intervalCounter = 0;
+
+	printf("INTEGRATION BACKEND: RECTANGLES\n");
+	printf("a: %lf b: %lf dx: %lf\n", a, b, dx);
+
+	for (double runnerX = a; intervalCounter < N_INTERVALS; runnerX += dx, intervalCounter++) {
+		
+		runnerH = this->compute(runnerX);
+		result += runnerH;
+	}
+
+	result *= dx;
+
+	return result;
+}
+
+double Polynomial::integrateByTrapezoidal(double a, double b)
+{
+	double runnerH;	// y-value
+	double dx = this->getIntervalAmplitude(a, b);
+	double result = 0;
+	int intervalCounter = 0;
+
+	printf("INTEGRATION BACKEND: TRAPEZOIDAL\n");
+	printf("a: %lf b: %lf dx: %lf\n", a, b, dx);
+
+	for (double runnerX = a; intervalCounter < N_INTERVALS; runnerX += dx, intervalCounter++) {
+		
+		runnerH = this->compute(runnerX) + this->compute(runnerX + dx);
+		result += runnerH;
+	}
+
+	result *= (dx / 2);
+
+	return result;
+}
+
+double Polynomial::integrateByCavSimp(double a, double b)
+{
+	double runnerH; // y-value
+	// so that is possible to have the mean point of all the N intervals.
+	double numIntervals = N_INTERVALS * 2;
+	double dx = this->getIntervalAmplitude(a, b) / 2;
+	double result = 0;
+	double firstAndLast = this->compute(a) + this->compute(b);
+	double even = 0.0, odd = 0.0; 
+
+	printf("INTEGRATION BACKEND: CAVALIERI-SIMPSON\n");
+	printf("a: %lf b: %lf dx: %lf\n", a, b, dx);
+
+	int intervalCounter = 1;
+	// odd-indexed
+	for (double runnerX = a; intervalCounter < numIntervals; runnerX += dx, intervalCounter++) {
+
+		if (intervalCounter % 2)
+			odd += this->compute(runnerX);
+		else
+			even += this->compute(runnerX);
+	}
+
+	odd *= 4;
+	even *= 2;
+	result = firstAndLast + odd + even;
+
+	result *= (0.33*dx);
+
+	return result;
+}
+
+double Polynomial::getIntervalAmplitude(double a, double b)
+{
+	return std::fabs(a-b) / N_INTERVALS;
+}
+
 template <typename T, typename BinaryOperator>
 void Polynomial::applyLambda(const std::deque<T>& first, const std::deque<T>& second, std::deque<T>& res, BinaryOperator func) {
 
